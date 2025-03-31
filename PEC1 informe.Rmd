@@ -1,0 +1,14 @@
+---
+title: "PEC1"
+author: "Enrique Pouso-Vázquez Sánchez"
+date: "2025-03-31"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+- Pregunta biológica? Reflexion sobre lo que queremos estudiar, definir tratamientos, tipos de variables.
+- Tipo de estudio? Comparativo, buscamos diferencias entre los dos grupos a partir de biomarcadores (metabolitos en orina) para, de esta forma, poder determinar el estado de afectación a diferentes organos de una persona usuaria de opioides.
+- Análisis estadístico exploratorio: Descriptivo, PCA (efecto batch) y clustering (Busqueda de patrones)
