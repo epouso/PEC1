@@ -11,4 +11,35 @@ knitr::opts_chunk$set(echo = TRUE)
 
 - Pregunta biológica? Reflexion sobre lo que queremos estudiar, definir tratamientos, tipos de variables.
 - Tipo de estudio? Comparativo, buscamos diferencias entre los dos grupos a partir de biomarcadores (metabolitos en orina) para, de esta forma, poder determinar el estado de afectación a diferentes organos de una persona usuaria de opioides.
-- Análisis estadístico exploratorio: Descriptivo, PCA (efecto batch) y clustering (Busqueda de patrones)
+- Análisis estadístico exploratorio: 
+Descriptivo, 
+PCA: 
+1)Comentar efecto batch, no se puede determinar porque no sabemos ni lotes ni cuando se ha hecho cada analisis pero que si se tubiera la info se podria estudiar.
+2) Comentar posibles variables latentes
+*Comentar que hacemos el pca con prcomp porque es más eficiente en datos de alta dimensionalidad. Comentar que normalizamos los datos para que la escala de las variables no afecte al resultado del pca, de esta forma se evita que variables con mayor escala afecten más al analisis y permite comparar de forma justa todas las variables.
+Porque es importante el PCA en este estudio:
+El PCA permite generar gráficos de dispersión de las primeras dos o tres componentes principales (PC1 vs. PC2 o PC1 vs. PC2 vs. PC3), donde:
+🔹 Se pueden detectar grupos naturales en los datos (e.g., diferencias entre individuos sanos vs. enfermos).
+🔹 Se pueden identificar patrones metabólicos asociados a condiciones específicas.
+🔹 Se pueden encontrar outliers o muestras que se comportan de manera anómala.
+Cada componente principal es una combinación de metabolitos con diferentes pesos (loadings).
+🔹 Metabolitos con mayores pesos en PC1 o PC2 pueden ser clave en la diferenciación de grupos.
+🔹 Esto ayuda a seleccionar los metabolitos más relevantes para biomarcadores potenciales.
+
+Clustering (Busqueda de patrones)
+
+En este caso se realizará un cluster jerárquico basado en distancias euclídeas y enlaces promedio (“average linkage’’) (Como en el ejemplo). El método "average linkage" es un enfoque intermedio entre el "single" y el "complete", que puede ser útil cuando se busca un balance en la formación de clusters
+
+Ventajas
+Produce clusters equilibrados y suaves. Más robusto a la forma de los clusters que "single linkage"
+Desventajas
+Menos sensible a outliers que "single linkage". Puede ser menos preciso con datos muy dispersos
+
+Su objetivo es descubrir grupos en los datos, es decir grupos de individuos (o eventualmente de variables) que pueden considerarse más similares entre ellos que a los individuos de los otros grupos.
+Realizaremos un Clustering jerárquico debido a que no sabemos cuantos clusteres utilizar ( el K-means necesitas decidir cuántos clusters quieres de antemano).
+
+Seleccionar solo las variables (genes) que tienen una mayor variabilidad es una técnica común para mejorar la interpretación de los análisis de clustering, ya que reduce el ruido y se enfoca en las características más relevantes para distinguir entre los grupos. En este caso, seleccionar los genes con las desviaciones estándar más altas es una forma sencilla de capturar aquellos que varían más entre las observaciones.
+
+EJEMPLO DE DISCUSIÓN:
+
+"El dendrograma generado con 336 observaciones muestra una clara división en dos grandes grupos, lo que sugiere que las muestras pueden agruparse en dos categorías principales. Al cortar el dendrograma a una distancia de 10, identificamos dos clusters, uno de los cuales contiene principalmente muestras de pacientes usuarios de opioides, mientras que el otro agrupa a los pacientes no usuarios. Esta separación podría reflejar diferencias metabólicas entre los dos grupos. Sin embargo, el tamaño desigual de los clusters (con un grupo considerablemente mayor que el otro) puede indicar que más análisis son necesarios para explorar subgrupos dentro de estas categorías. Los metabolitos seleccionados con alta variabilidad parecen ser relevantes para la separación entre los grupos, y una futura validación con datos adicionales podría confirmar estos hallazgos."
