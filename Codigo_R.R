@@ -42,7 +42,6 @@ datos <- datos[-1,]
 # Transformación de los datos de carateres a numéricos.
 
 datos[,-1] <- as.data.frame(lapply(datos[,-1], as.numeric))
-View(datos)
 str(datos)
 
 # Crear el SummarizedExperiment.
@@ -63,15 +62,16 @@ dim(row_data)
 
 str(datos)
 
+## ANÁLISIS DE EXPLORACIÓN DE LOS DATOS ##
+
 # Valores NA.
 
 sum(is.na(assay(sumexp)))
 
-## Correlación y clustering de variables para agrupar información similar
-## PCA
+# PCA
 
 matriz <- assay(sumexp) # Creamos una variable con los datos del assay.
-matriz_num <- matriz[, sapply(matriz, is.numeric)] # Creamos una variables con los datos numéricos del assay.
+matriz_num <- matriz[, sapply(matriz, is.numeric)] # Creamos una variable con los datos numéricos del assay.
 pca <- prcomp(matriz_num, scale = TRUE)  # Realizamos el analisis de componentes principales, y normalizamos las variables.
 summary(pca) # Resultado pca (Desviación estandar y % de varianza sobre el total).
 names(pca)
@@ -83,21 +83,19 @@ var_pc2 <- pca$sdev[2]^2/sum(pca$sdev^2) # % de variabilidad explicado por el PC
 col_grupo <- colData(sumexp)[-1, "Grupo"]
 
 plot(pca$x[,1:2], col = as.factor(col_grupo), main = "PCA: Proyecciones PC1 & PC2", xlab = paste("PC1 ", round(var_pc1, 2),"%"), ylab = paste("PC2 ", round(var_pc2,2), "%"))  # Visualizar las primeras dos componentes
-legend("topright", legend = levels(as.factor(col_grupo)), 
-       fill = rainbow(length(levels(as.factor(col_grupo)))))
 
-## Clustering
+# Clustering
 
 matriz_num_scal <- scale(matriz_num) # Escalar los datos
 sd_matriz <- apply(matriz_num_scal, MARGIN=1, FUN="sd") # Calcular la desviación estandar de cada fila.
-sel_matriz <- (sd_matriz > quantile(sd_matriz, 0.975)) # Determinar las variables con una desviación estandar mayor al 1%.
+sel_matriz <- (sd_matriz > quantile(sd_matriz, 0.975)) # Determinar el 2.5% de las variables con mayor desviación estandar.
 matriz_clust <- matriz_num_scal[sel_matriz,] # Seleccionar las variables con una desviación estandar mayor al 1%.
 dim(matriz_clust)
 
 t_matriz_clust <- t(matriz_clust) # Transponer la matriz para hacer el clustering (Observaciones en filas y variables en columnas).
-dim(t_matriz_clust)
 
 dist_matriz <- dist(t_matriz_clust) # Determinar la distancia euclidea de las observaciones.
 clust <- hclust(dist_matriz, method = "average") # Realizar el clustering.
 plot(clust, main = "Dendograma", xlab = "Observaciones", ylab = "Distancia", labels = F) # Crear el dendograma. Sin etiquetas.
 plot(clust, main = "Dendograma", xlab = "Observaciones", ylab = "Distancia") # Crear el dendograma. Con etiquetas.
+
